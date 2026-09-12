@@ -1,0 +1,121 @@
+{
+  "name": "wordwise",
+  "version": "1.0.0",
+  "description": "WordWise - local AI-assisted adaptive vocabulary learning",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "rebuild": "electron-rebuild",
+    "pack-audio": "node scripts/pack_audio_db.mjs",
+    "prebuild-vocab": "node scripts/prebuild_vocab_dbs.mjs",
+    "predist": "npm run pack-audio",
+    "dist": "node scripts/build.js --win",
+    "dist:win-x64": "node scripts/build.js --win --x64",
+    "dist:win-ia32": "node scripts/build.js --win --ia32",
+    "dist:mac": "node scripts/build.js --mac",
+    "dist:mac-arm64": "node scripts/build.js --mac --arm64",
+    "dist:mac-x64": "node scripts/build.js --mac --x64"
+  },
+  "keywords": [
+    "electron",
+    "vocabulary",
+    "english",
+    "sm2"
+  ],
+  "author": "cy",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "electron-rebuild": "^3.2.9",
+    "msedge-tts": "^2.0.7"
+  },
+  "dependencies": {
+    "node-llama-cpp": "^3.18.1"
+  },
+  "optionalDependencies": {
+    "@node-llama-cpp/mac-arm64-metal": "^3.18.1",
+    "@node-llama-cpp/mac-x64": "^3.18.1",
+    "@node-llama-cpp/win-x64": "^3.18.1",
+    "@node-llama-cpp/win-x64-cuda": "^3.18.1",
+    "@node-llama-cpp/win-x64-vulkan": "^3.18.1"
+  },
+  "build": {
+    "appId": "com.wordwise.vocab-tester",
+    "productName": "WordWise",
+    "artifactName": "WordWise_v1.0_Setup.${ext}",
+    "asar": true,
+    "asarUnpack": [
+      "vocab-core/*.node",
+      "node_modules/@node-llama-cpp/**/*.node",
+      "node_modules/@node-llama-cpp/**/*.dll",
+      "node_modules/@node-llama-cpp/**/*.dylib",
+      "node_modules/@node-llama-cpp/**/*.so",
+      "db/*.txt",
+      "db/*.db",
+      "audio.pack"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "artifactName": "WordWise_${version}_${arch}.${ext}",
+      "category": "public.app-category.education",
+      "identity": null
+    },
+    "linux": {},
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "shortcutName": "WordWise",
+      "include": "build/installer.nsh",
+      "warningsAsErrors": false
+    },
+    "files": [
+      "**/*",
+      "!copyright_prep${/*}",
+      "!copyright_prep_v2${/*}",
+      "!test${/*}",
+      "!*.md",
+      "!**/*.gguf",
+      "!node_modules/**/*.md",
+      "!node_modules/**/test*/**",
+      "!node_modules/**/docs/**",
+      "!node_modules/**/example*/**",
+      "!node_modules/node-llama-cpp/llama/localBuilds/**",
+      "!node_modules/@node-llama-cpp/win-arm64/**",
+      "!vocab-core/target${/*}",
+      "!vocab-core/src${/*}",
+      "!vocab-core/.git${/*}",
+      "!vocab-core/Cargo.*",
+      "!vocab-core/build.rs",
+      "!vocab-core/.gitignore",
+      "!tts-scripts${/*}",
+      "!audio${/*}",
+      "!scripts${/*}",
+      "!finetune${/*}",
+      "!finetune-output${/*}",
+      "!benchmark${/*}",
+      "!qa-report${/*}",
+      "!vocab-core/vocab_core.mac.node",
+      "!node_modules/@node-llama-cpp/mac-*/**",
+      "!node_modules/@node-llama-cpp/linux-*/**"
+    ],
+    "npmRebuild": false
+  }
+}

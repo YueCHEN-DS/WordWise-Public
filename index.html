@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' media:; connect-src 'self' media:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <title>WordWise</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Liquid Glass SVG Filter -->
+  <svg class="bg-filter" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <defs>
+      <filter id="liquid-filter">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="35" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 40 -15" result="liquid" />
+        <feBlend in="SourceGraphic" in2="liquid" />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="bg-container">
+    <div class="liquid-layer">
+      <div class="blob"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+    </div>
+  </div>
+
+  <div class="app-frame">
+    <!-- Draggable Header -->
+    <header class="app-header">
+      <div class="brand">
+        <h1>WordWise</h1>
+        <span class="version-badge">V1.0</span>
+      </div>
+      <div class="header-controls no-drag">
+        <div id="modelModeBadge" class="model-mode-badge is-idle" title="当前 AI 模型">AI 未加载</div>
+        <div id="scoreDisplay" class="score-badge">💠 积分: <span id="currentScoreSpan">0</span></div>
+        <div id="licenseBadge" class="license-badge is-trial" title="会员状态" onclick="openSettingsModal()">试用</div>
+      </div>
+    </header>
+
+    <div class="app-workspace">
+      <!-- Sidebar -->
+      <aside class="app-sidebar no-drag">
+        <div class="sidebar-section">
+          <span class="sidebar-title">词典库</span>
+          <div class="dict-selector">
+            <select id="vocabListSelect" class="practice-select" onchange="changeVocabList()"></select>
+            <button class="toolbar-btn" id="refreshListBtn" onclick="refreshVocabList()" title="修复词库">🔄</button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <span class="sidebar-title">抽词模式</span>
+          <div class="mode-toggle" id="modeToggle">
+            <button class="mode-toggle-btn active" id="modeRandomBtn" onclick="setMode('random')">随机</button>
+            <button class="mode-toggle-btn" id="modeSeqBtn" onclick="setMode('sequential')">顺序</button>
+            <button class="mode-toggle-btn" id="modeAdaptiveBtn" onclick="setMode('adaptive')">自适应</button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <span class="sidebar-title">每次练习数量</span>
+          <div class="dict-selector">
+            <select id="practiceCount" class="practice-select" style="width:100%" onchange="changePracticeCount()">
+              <option value="10">10 词</option>
+              <option value="20">20 词</option>
+              <option value="50">50 词</option>
+              <option value="all" selected>自适应 (全部)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-links">
+          <button class="action-btn" id="mistakeReviewBtn" onclick="toggleMistakeReview()">
+            <span style="font-size: 1.2rem;">📝</span> 错题复习
+            <span class="mistake-due-badge" id="mistakeDueBadge" hidden>0</span>
+          </button>
+          <button class="action-btn" onclick="openConfusionMapModal()">
+            <span style="font-size: 1.2rem;">🧭</span> 个人易混图
+          </button>
+          <button class="action-btn" onclick="openGuideModal()">
+            <span style="font-size: 1.2rem;">📖</span> 用户指南 & 帮助
+          </button>
+          <button class="action-btn" onclick="openSettingsModal()">
+            <span style="font-size: 1.2rem;">⚙️</span> 系统配置 & 词库
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- Main View -->
+      <main class="app-main-view">
+
+        <!-- Progress Bar -->
+        <div class="epoch-bar">
+          <div class="epoch-header">
+            <div style="display: flex; align-items: center;">
+              <span id="epochCount">...</span>
+              <div class="ai-level-container">
+                <span class="ai-level-label">AI等级划分</span>
+                <div class="ai-stars">
+                  <span class="star-filled">★</span>
+                  <span class="star-filled">★</span>
+                  <span class="star-empty">★</span>
+                  <span class="star-empty">★</span>
+                  <span class="star-empty">★</span>
+                </div>
+              </div>
+            </div>
+            <span class="epoch-badge" id="epochLabel">第 1 轮</span>
+          </div>
+          <div class="epoch-track">
+            <div class="epoch-fill" id="epochFill"></div>
+          </div>
+        </div>
+
+        <div class="testing-board">
+
+          <!-- Left: Word Display -->
+          <div class="left-board">
+            <div class="glass-card word-hero" id="quizCard">
+              <div id="wordIndex" class="word-index" style="position: absolute; top: 20px; left: 24px;"></div>
+              <div class="word-status-group" style="position: absolute; top: 20px; right: 24px; display: flex; gap: 8px; align-items: center;">
+                <span class="review-tag" id="reviewTag">🔄 复习</span>
+                <span class="difficulty-badge" id="difficultyBadge">
+                  <span>难度</span>
+                  <span class="diff-stars" id="diffStars">★★★☆☆☆☆☆☆☆</span>
+                </span>
+              </div>
+              <div id="currentWord" class="word-placeholder">点击下方抽取单词</div>
+              <div class="phonetic"></div>
+              <div class="mastery-meter" id="masteryMeter">
+                <div class="mastery-meter-header">
+                  <span>掌握度</span>
+                  <span id="masteryValue">0%</span>
+                </div>
+                <div class="mastery-meter-track">
+                  <div class="mastery-meter-fill" id="masteryFill"></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn-primary" id="nextBtn" onclick="requestNextQuestion('main_next')">
+              抽取下一个 ➡️
+            </button>
+          </div>
+
+          <!-- Right: Answer Input -->
+          <div class="right-board">
+            <div class="glass-card flex-grow-card" id="answerCard" style="flex:1;">
+
+              <div class="answer-input-wrapper">
+                <input type="text" id="answerInput" class="answer-input" placeholder="写下中文意思..." autocomplete="off">
+              </div>
+
+              <div style="margin-top: 16px;">
+                <button class="btn-primary" id="checkBtn" onclick="checkAnswer()">
+                  ✨ AI 深度判卷
+                </button>
+              </div>
+
+              <div class="hints-stack">
+                <div id="hintLevel1Container">
+                  <button class="btn-outline" id="hintLevel1Btn" onclick="requestHint(1)">💡 L1 提示 (免费)</button>
+                </div>
+                <div id="hintLevel2Container" style="display: none;">
+                  <button class="btn-outline" id="hintLevel2Btn" onclick="requestHint(2)">💡 L2 提示 (-10积分)</button>
+                </div>
+                <div id="hintLevel3Container" style="display: none;">
+                  <button class="btn-outline" id="hintLevel3Btn" onclick="requestHint(3)">💡 L3 提示 (-30积分)</button>
+                </div>
+              </div>
+
+              <div class="eval-result-area">
+                <div class="loading" id="loading">
+                  <div class="spinner"></div> 分析语义中...
+                </div>
+                <div class="result-box" id="resultBox"></div>
+                <div class="score-ring-container" id="scoreRingContainer">
+                  <div class="score-ring-wrapper">
+                    <svg class="score-ring-svg" viewBox="0 0 100 100">
+                      <circle class="score-ring-bg" cx="50" cy="50" r="40" />
+                      <circle class="score-ring-fill" id="scoreRingFill" cx="50" cy="50" r="40" />
+                    </svg>
+                    <div class="score-ring-value" id="scoreRingValue">0<small>分</small></div>
+                  </div>
+                  <div class="score-ring-label" id="scoreRingLabel"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Guide Modal -->
+  <div id="guideModalOverlay" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📖 使用指南 (User Guide)</h2>
+        <button class="modal-close" onclick="closeGuideModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:12px;"><b>英文名称：</b>WordWise</p>
+        <h3 style="color:var(--accent-hover);">1. 快速上手 (Quick Start)</h3>
+        <p style="margin-bottom:12px;">• <b>环境准备</b>：点击侧边栏「系统配置」，下载或加载本地 GGUF 模型。建议开启「GPU加速」以获得秒级响应。<br>
+          • <b>词库导入</b>：支持导入 TXT/JSON/CSV 格式词表，或直接在侧边栏切换内置的高考、四六级、雅思、托福及 GRE 词库。</p>
+
+        <h3 style="color:var(--accent-hover); margin-top:10px;">2. AI 语义深度判卷</h3>
+        <p style="margin-bottom:12px;">不同于传统的字符匹配，WordWise 使用本地大语言模型进行<b>语义级校验</b>。它能理解近义词、同义词及部分正确的翻译，并给出 0-100
+          的深度评分与直观的中文原理解析。</p>
+
+        <h3 style="color:var(--accent-hover); margin-top:10px;">3. 自适应与个人易混图</h3>
+        <p style="margin-bottom:12px;">• <b>顺序/随机</b>：适合常规记忆巩固。<br>
+          • <b>自适应模式 (AI Adaptive)</b>：系统会结合复习到期时间、答题表现、重复误答和作答速度选择下一词。<br>
+          • <b>个人易混图</b>：当同一错误释义重复出现时，系统会在本地记录它的风险和可能关联词，帮助你理解错误模式。</p>
+
+        <h3 style="color:var(--accent-hover); margin-top:10px;">4. 三级启发式提示 (Hints)</h3>
+        <p style="margin-bottom:12px;">• <b>L1 (启发)</b>：显示首字母、词性及第一个中文字符。<br>
+          • <b>L2 (进阶)</b>：提供纯英文释义，训练您的英语思维。<br>
+          • <b>L3 (实战)</b>：提供同义词对比及<b>完形填空例句</b>，掌握真实语境用法。</p>
+
+        <h3 style="color:var(--accent-hover); margin-top:10px;">5. 科学复习 (SM-2 Spaced Repetition)</h3>
+        <p style="margin-bottom:12px;">系统引入了经典的 <b>SM-2 间隔复习算法</b>。对于掌握良好的词汇，系统将智能延长复习周期；对于疑难词汇，系统将精准安排次日复习，实现高效的长时记忆转归。
+        </p>
+
+        <div style="text-align:center; margin-top:24px;">
+          <button class="btn-primary" style="width: auto; padding: 12px 48px;"
+            onclick="closeGuideModal()">开启高效学习</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Confusion Map Modal -->
+  <div id="confusionMapModalOverlay" class="modal-overlay">
+    <div class="modal-content confusion-map-modal">
+      <div class="modal-header">
+        <div>
+          <h2>🧭 个人易混图</h2>
+          <p class="modal-subtitle">根据重复误答、最近出现时间、得分与作答速度生成；仅在本机保存。</p>
+        </div>
+        <button class="modal-close" onclick="closeConfusionMapModal()">×</button>
+      </div>
+      <div class="modal-body confusion-map-body">
+        <div class="confusion-map-toolbar">
+          <label for="confusionRiskFilter">显示风险</label>
+          <select id="confusionRiskFilter" class="practice-select" onchange="renderConfusionMap()">
+            <option value="0">全部已识别关系</option>
+            <option value="60">风险 60 分以上</option>
+            <option value="80">风险 80 分以上</option>
+          </select>
+          <button class="btn-small" onclick="loadConfusionMap()">刷新</button>
+        </div>
+        <div id="confusionMapStatus" class="confusion-map-status">正在读取本地学习记录…</div>
+        <div id="confusionMapGraph" class="confusion-map-graph" aria-live="polite"></div>
+        <div class="confusion-map-legend">
+          <span><i class="legend-dot confirmed"></i> 已定位词对</span>
+          <span><i class="legend-dot evidence"></i> 未定位错误释义</span>
+          <span>连线越粗，表示重复出现越多。</span>
+        </div>
+        <section id="confusionMapDetail" class="confusion-map-detail is-empty">
+          选择图中的关系，查看错误释义、风险构成和练习入口。
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModalOverlay" class="modal-overlay">
+    <div class="modal-content large-modal">
+      <div class="modal-header">
+        <h2>⚙️ 系统配置</h2>
+        <button class="modal-close" onclick="closeSettingsModal()">×</button>
+      </div>
+      <div class="modal-body modal-split">
+
+        <div class="modal-col">
+          <section class="settings-card">
+            <div class="card-title flex-between">
+              <span>🤖 AI 模型管理</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="hwAccelToggle" onchange="toggleHwAccel()" style="display:none;" checked />
+                <label class="switch">
+                  <input type="checkbox" id="hwAccelToggle_visual"
+                    onchange="document.getElementById('hwAccelToggle').checked=this.checked; toggleHwAccel()" checked />
+                  <span class="slider"></span>
+                </label>
+                <span id="hwAccelLabel" style="font-size:0.9rem; font-weight:800;">GPU加速</span>
+              </div>
+            </div>
+
+            <div class="compute-mode-panel">
+              <span class="compute-mode-kicker">当前算力模式</span>
+              <strong id="computeModeCurrent">尚未加载</strong>
+              <p id="hardwareCapabilitySummary">正在检测设备算力…</p>
+              <p id="lowModeFeatureNote" class="low-mode-feature-note">
+                QWEN 低算力模式使用 1.7B 模型，仅保留本地 L1 提示；不确定答案不会计分。
+              </p>
+              <p id="wordwiseModeFeatureNote" class="low-mode-feature-note" style="display:none;">
+                QWEN-WordWise 使用经 WordWise 数据微调的 v1 1.7B 模型，并保留保守复核与本地 L1 提示限制。
+              </p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 16px;">
+              <button class="btn-small" style="background:var(--accent); color:#fff;" id="proModeBtn"
+                onclick="startComputeMode('pro')">🚀 启动 QWEN-Pro</button>
+              <button class="btn-small wordwise-mode-action" id="wordwiseModeBtn"
+                onclick="startComputeMode('wordwise')">🧠 启动 QWEN-WordWise</button>
+              <button class="btn-small low-mode-action" id="lowModeBtn"
+                onclick="startComputeMode('low')">🌱 启动低算力模式</button>
+              <button class="btn-small" id="selectModelBtn" onclick="selectModelFile()">📁 选择本地文件</button>
+              <button class="btn-small" id="unloadModelBtn" onclick="unloadModel()"
+                style="color:var(--error); display:none;">⏏️ 卸载</button>
+            </div>
+
+            <div id="downloadProgressContainer" style="display: none;">
+              <div class="progress-info">
+                <span id="downloadProgressText">准备中...</span>
+                <span id="downloadProgressPct">0%</span>
+              </div>
+              <div class="progress-track">
+                <div id="downloadProgressBar" class="progress-bar"></div>
+              </div>
+            </div>
+
+            <div id="modelStatus"
+              style="display:none; padding:12px; background:#fff; border-radius:12px; font-weight:800; font-size:0.9rem; margin-top:10px; border:1px solid var(--border-glass);">
+            </div>
+          </section>
+
+          <section class="settings-card" style="margin-top:0;">
+            <div class="card-title">✨ 界面设置</div>
+            <div class="flex-between">
+              <span style="font-weight:800;">启动动态背景果冻 (节省资源可关)</span>
+              <label class="switch">
+                <input type="checkbox" id="bgToggle" checked onchange="toggleBackgroundEffect()">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="flex-between" style="margin-top:12px;">
+              <span style="font-weight:800;">新词出现时自动朗读</span>
+              <label class="switch">
+                <input type="checkbox" id="autoReadToggle" onchange="toggleAutoRead()">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="auto-advance-setting">
+              <div>
+                <strong>⏱ 答对后自动进入下一题</strong>
+                <span id="autoAdvanceSettingState">1.5 秒</span>
+              </div>
+              <select id="autoAdvanceDelaySelect" class="practice-select"
+                onchange="updateAutoAdvanceSettings()" aria-label="自动跳转等待时间">
+                <option value="1500">1.5 秒</option>
+                <option value="3000">3 秒</option>
+                <option value="5000">5 秒</option>
+                <option value="8000">8 秒</option>
+              </select>
+              <label class="switch">
+                <input type="checkbox" id="autoAdvanceToggle" checked onchange="updateAutoAdvanceSettings()">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </section>
+
+          <section class="settings-card demo-mode-card" id="demoModeSettingsCard" style="margin-top:0;">
+            <div class="card-title flex-between">
+              <span>🎬 演示模式</span>
+              <span class="demo-mode-state" id="demoModeState">当前关闭</span>
+            </div>
+            <p class="demo-mode-description" id="demoModeDescription">
+              使用固定内容展示判卷、分级提示、自适应学习和个人易混图，不会写入真实学习记录。
+            </p>
+            <button class="btn-small demo-mode-btn" id="demoModeToggleBtn" onclick="toggleDemoMode()">
+              进入演示模式
+            </button>
+          </section>
+        </div>
+
+        <div class="modal-col">
+          <section class="settings-card" id="licenseSettingsCard">
+            <div class="card-title">💎 会员与激活</div>
+            <div id="licenseStatusLine" class="license-status-line">正在读取会员状态…</div>
+            <div class="license-device-row">
+              <div class="license-device-label">本机设备码（开通时发给开发者）</div>
+              <div class="license-device-code">
+                <code id="licenseDeviceCode">—</code>
+                <button class="btn-small" id="copyDeviceCodeBtn" onclick="copyLicenseDeviceCode()">复制</button>
+              </div>
+            </div>
+            <div class="license-activate-row">
+              <input type="text" id="licenseCodeInput" placeholder="粘贴激活码 WW1-..." autocomplete="off"
+                spellcheck="false">
+              <button class="btn-small" style="background:var(--accent); color:#fff;" id="activateLicenseBtn"
+                onclick="activateLicense()">激活</button>
+            </div>
+            <div id="licenseActivateStatus" class="license-activate-status" aria-live="polite"></div>
+            <div class="license-price-list">
+              <div class="license-price-title">套餐</div>
+              <ul>
+                <li><span>半年会员</span><b>¥19.9</b></li>
+                <li><span>一年会员</span><b>¥29.9</b></li>
+                <li><span>两年会员</span><b>¥49.9</b></li>
+                <li><span>终身会员</span><b>¥199.9</b></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="settings-card flex-grow-card">
+            <div class="card-title">📚 外部词表管理</div>
+
+            <div class="input-row">
+              <input type="text" id="newWordInput" placeholder="输入单词..." autocomplete="off">
+              <button class="btn-small" style="background:var(--accent); color:#fff;" onclick="addWord()">添加</button>
+            </div>
+
+            <div class="flex-between" style="margin-top:16px;">
+              <span id="wordCount"
+                style="font-weight:900; background:var(--accent); color:#fff; padding:4px 12px; border-radius:12px; font-size:0.9rem;">共
+                0 词</span>
+              <button class="btn-small" id="toggleListBtn" onclick="toggleWordList()">显示隐藏词表</button>
+            </div>
+
+            <div class="word-list-container hidden" id="wordList"></div>
+
+            <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+              <button class="btn-small" onclick="saveToTxt()">⬇️ 存为 TXT</button>
+              <button class="btn-small" onclick="document.getElementById('importFileInput').click()">⬆️ 导入文件</button>
+              <button class="btn-small" onclick="exportWords()">⬇️ 存为 JSON</button>
+              <input type="file" id="importFileInput" accept=".txt,.json" onchange="importFile(event)"
+                style="display:none;">
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Low-compute recommendation: the user must explicitly choose a mode. -->
+  <div id="lowModeReminderOverlay" class="modal-overlay low-mode-reminder-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="lowModeReminderTitle">
+    <div class="modal-content low-mode-reminder">
+      <div class="low-mode-reminder-icon">🌱</div>
+      <h2 id="lowModeReminderTitle">建议启用低算力模式</h2>
+      <p>检测到当前设备运行 QWEN-Pro 可能较慢或出现内存不足。QWEN 使用更小的 1.7B 模型，并对不确定结果停止计分。</p>
+      <div id="lowModeReasonList" class="low-mode-reason-list"></div>
+      <div id="lowModeReminderStatus" class="low-mode-reminder-status" aria-live="polite"></div>
+      <div class="low-mode-reminder-actions">
+        <button id="acceptLowModeBtn" class="btn-primary" onclick="resolveLowModeRecommendation('low')">
+          启用低算力模式
+        </button>
+        <button id="keepProModeBtn" class="btn-outline" onclick="resolveLowModeRecommendation('pro')">
+          继续使用 QWEN-Pro
+        </button>
+      </div>
+      <small>选择会被记住，之后可随时在「系统配置」中切换。</small>
+    </div>
+  </div>
+
+  <!-- 会员到期锁屏遮罩：不可关闭，只能激活或退出 -->
+  <div id="licenseExpiredOverlay" class="modal-overlay license-lock-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="licenseLockTitle" style="display:none;">
+    <div class="modal-content license-lock">
+      <div class="license-lock-icon">🔒</div>
+      <h2 id="licenseLockTitle">会员已到期</h2>
+      <p id="licenseLockReason">试用期满或会员已过期，继续使用请开通会员。</p>
+      <div class="license-device-row">
+        <div class="license-device-label">本机设备码（开通时发给开发者）</div>
+        <div class="license-device-code">
+          <code id="licenseLockDeviceCode">—</code>
+          <button class="btn-small" id="copyLockDeviceCodeBtn" onclick="copyLicenseDeviceCode()">复制</button>
+        </div>
+      </div>
+      <div class="license-activate-row">
+        <input type="text" id="licenseLockCodeInput" placeholder="粘贴激活码 WW1-..." autocomplete="off"
+          spellcheck="false">
+        <button class="btn-primary" id="licenseLockActivateBtn" onclick="activateLicense(true)">激活</button>
+      </div>
+      <div id="licenseLockActivateStatus" class="license-activate-status" aria-live="polite"></div>
+      <div class="license-lock-actions">
+        <button class="btn-outline" onclick="window.electronAPI && window.close ? window.close() : null">退出</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="demo-mode.js"></script>
+  <script src="renderer.js"></script>
+</body>
+
+</html>

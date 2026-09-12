@@ -1,0 +1,2 @@
+Name "WordWise"
+BrandingText "WordWise"

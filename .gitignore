@@ -1,0 +1,94 @@
+# Node & Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Packaging & Distribution Artifacts
+dist/
+build/out/
+*.dmg
+*.exe
+*.zip
+*.blockmap
+
+# Large AI Model Weights (>100MB GitHub Limit)
+*.gguf
+*.bin
+*.safetensors
+/models/
+
+# Rust Build Artifacts & Intermediate Binaries
+vocab-core/target/
+
+# Private research, training, and release material
+/finetune/
+/finetune-output/
+/wordwise-gold/
+/wordwise-gold-archive/
+/research-paper-portfolio/
+/copyright_prep/
+/copyright_prep_v*/
+/evaluation/
+/simple-v3-*.md
+
+# Local vocabulary and media assets (verify redistribution rights first)
+/db/*.txt
+/db/*.db
+/db/*.sqlite
+/db/*.sqlite3
+/audio/
+/audio.pack
+*.mp4
+*.mov
+
+# Private training/evaluation helpers and local fixtures
+/approved-sense-cards.*
+/assistant-review.*
+/dataset-manifest.*
+/sense-cards.schema.*
+/review-samples.*
+/hint-samples.*
+/study-dialogues-sample.*
+/general-dialogues-sample.*
+/hard-negatives-supplement.*
+/review-low-confidence-supplement.*
+/v4-*.jsonl
+/generate-large-finetuning-data.mjs
+/large-finetune-data-lib.mjs
+/finetune-data-lib.mjs
+/mock-large-mimo-server.mjs
+/scripts/generate-finetuning-data.mjs
+/scripts/generate-large-finetuning-data.mjs
+/scripts/*finetune*.mjs
+/scripts/build_copyright_*.cjs
+/scripts/gen_source.cjs
+/scripts/render_copyright*
+/scripts/evaluate-wordwise-model.mjs
+
+# License issuance belongs in a private operator checkout
+/scripts/gen-keypair.mjs
+/scripts/issue-code.mjs
+/scripts/issue-beta-super-code.mjs
+/issue-beta-super-code.mjs
+/paid/
+/commercial/
+/release-private/
+/public-release/
+.codex-public-*
+
+# SQLite Temporary and Journal/WAL Files
+*.db-wal
+*.db-shm
+*.tmp
+
+# Operating System & IDE Cache Files
+.DS_Store
+.ruff_cache/
+.workbuddy/
+
+# Security & Private Keys (NEVER commit private keys or secrets)
+*.pem
+wordwise-keys/
+.env
+.env.*

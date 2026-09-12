@@ -1,0 +1,26 @@
+[package]
+name = "vocab-core"
+version = "1.0.0"
+edition = "2021"
+description = "WordWise vocabulary core - Rust/SQLite native module"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { version = "2", features = ["napi4", "async", "tokio_rt"] }
+napi-derive = "2"
+rusqlite = { version = "0.31.0", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt"] }
+chrono = "0.4"
+unicode-normalization = "0.1"
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+opt-level = 3
+lto = true

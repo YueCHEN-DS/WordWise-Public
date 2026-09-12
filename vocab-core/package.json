@@ -1,0 +1,13 @@
+{
+  "name": "vocab-core",
+  "version": "1.0",
+  "description": "Rust/SQLite native module for WordWise vocabulary data management",
+  "main": "index.js",
+  "scripts": {
+    "build": "cargo build --release && cp target/release/libvocab_core.dylib vocab_core.mac.node",
+    "build:win": "cargo build --release && copy target\\release\\vocab_core.dll vocab_core.win32.node",
+    "build:win-x64": "cargo xwin build --release --target x86_64-pc-windows-msvc && cp target/x86_64-pc-windows-msvc/release/vocab_core.dll vocab_core.win32.node"
+  },
+  "keywords": [],
+  "license": "ISC"
+}
