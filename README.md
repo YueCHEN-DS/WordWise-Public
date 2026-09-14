@@ -37,6 +37,7 @@ material, operator-only license tooling, or release packages. When adding
 vocabulary or model files, use sources you are permitted to redistribute.
 
 ## Downloads
+### We are now provide the online trail version which is accessible in https://43.142.125.70/
 
 - Baidu Netdisk:
 - Google Drive:
