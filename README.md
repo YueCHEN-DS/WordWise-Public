@@ -41,6 +41,7 @@ vocabulary or model files, use sources you are permitted to redistribute.
 
 - Baidu Netdisk:
 - Google Drive:
+  · mac version: https://drive.google.com/file/d/1HcXjd0sbv-ed_uOwQ9XP0QfuUOXx8iUS/view?usp=sharing
 
 ## License
 
