@@ -39,7 +39,7 @@ vocabulary or model files, use sources you are permitted to redistribute.
 ## Downloads
 ### We are now provide the online trail version which is accessible in https://43.142.125.70/
 
-- Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5) code: vjra 
+- Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra 
 - Google Drive: [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
 
 ## License
