@@ -41,6 +41,7 @@ vocabulary or model files, use sources you are permitted to redistribute.
 
 - Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra 
 - Google Drive: [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+
 **contact to the developer at erpo8570@gmail.com for one year free trial**
 
 ## License
