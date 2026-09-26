@@ -117,5 +117,25 @@
       "!node_modules/@node-llama-cpp/linux-*/**"
     ],
     "npmRebuild": false
+  },
+  "overrides": {
+    "@electron/rebuild": {
+      "tar": "7.5.21"
+    },
+    "app-builder-lib": {
+      "tar": "7.5.21"
+    },
+    "cacache": {
+      "tar": "7.5.21"
+    },
+    "cmake-js": {
+      "tar": "7.5.21"
+    },
+    "electron-rebuild": {
+      "tar": "7.5.21"
+    },
+    "node-gyp": {
+      "tar": "7.5.21"
+    }
   }
 }
