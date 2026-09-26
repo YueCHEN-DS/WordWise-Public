@@ -37,8 +37,7 @@ material, operator-only license tooling, or release packages. When adding
 vocabulary or model files, use sources you are permitted to redistribute.
 
 ## Downloads
-### We are now provide the online trail version which is accessible in [WordWise-Web](https://wordwise.dpdns.org) [recently not available in China Mainland]
-
+### We are now provide the online trail version which is accessible in [WordWise-Web](https://wordwise.dpdns.org)
 - Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra 
 - Google Drive: [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
 
