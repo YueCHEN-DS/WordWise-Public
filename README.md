@@ -4,6 +4,8 @@ WordWise is a desktop English vocabulary learning app for focused practice and
 long-term retention. It helps learners build a personal word list, practise at
 their own pace, review mistakes, and see which words are easiest to confuse.
 
+**We are now releasing some parts of its core algorithms**
+
 The app is designed to work locally. Learning records stay on the device, and
 optional local language-model support can provide semantic feedback for typed
 answers.
