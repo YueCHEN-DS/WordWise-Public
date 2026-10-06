@@ -30,25 +30,6 @@ and core algorithms, rather than the hosted service's complete source code.
   (**Mes mots**), with adaptive practice, mistake review, a confusion map,
   hints and vocabulary import/export.
 
-> Beta — Features, AI grading and hints may be unstable or inaccurate.
-
-The service currently accepts **50 successful registrations per Shanghai
-calendar day** and shares **100 outbound AI calls per Shanghai calendar day**
-across all accounts. Retries also count toward that shared AI limit. These are
-service-wide limits, not a daily allowance for each user. Existing users can
-still sign in when registration is full. Both limits reset at midnight in
-Shanghai (Asia/Shanghai).
-
-| Edition | Learning records | Getting started |
-| --- | --- | --- |
-| Desktop v1.0 | Stored locally on your device | Existing downloads or the desktop source instructions below |
-| Web v2.0 public beta | Account and learning data stored on the hosted service | Open the portal and register or sign in |
-
-See the [web user guide and dated changelog](docs/WEB_BETA.md) for the language
-settings, signup grants and existing-user upgrade notice.
-
-![Language selection inside Settings, shown in French](docs/assets/language-settings.png)
-
 <!-- wordwise-web-v2:end -->
 
 ## Highlights
@@ -91,15 +72,6 @@ npm run check:public-files
 npm run check:package-files
 ```
 
-Stage the intended files and `public-files.json` before running the public-file
-check. The package check needs installed development dependencies, but does
-not need private dictionaries, audio archives or model weights and does not
-build an installer. See [developer tool instructions](docs/DEVELOPMENT_TOOLS.md).
-
-The existing desktop download links and free-trial contact below are retained.
-The online-trial link now opens the v2.0 public-beta portal; the listed desktop
-packages remain v1.0.
-
 <!-- wordwise-public-tools:end -->
 
 ## Downloads
@@ -107,7 +79,7 @@ packages remain v1.0.
 - Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra 
 - Google Drive: [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
 
-**contact to the developer at feedback@wordwise.dpdns.org for one year free trial**
+**If you have any questions, contact to the developer at feedback@wordwise.dpdns.org for one year free trial**
 
 ## License
 
