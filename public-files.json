@@ -3,7 +3,9 @@
   "files": [
     ".gitignore",
     "LICENSE",
+    "README.fr.md",
     "README.md",
+    "README.zh-CN.md",
     "beta-super-config.js",
     "build/installer.nsh",
     "compute-mode.js",

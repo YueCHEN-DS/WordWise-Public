@@ -1,5 +1,11 @@
 # WordWise
 
+<!-- wordwise-readme-language:begin -->
+<p align="right">
+  <a href="README.zh-CN.md">中文</a> | <a href="README.fr.md">Français</a> | <a href="README.md"><strong>English</strong></a>
+</p>
+<!-- wordwise-readme-language:end -->
+
 WordWise is a desktop English vocabulary learning app for focused practice and
 long-term retention. It helps learners build a personal word list, practise at
 their own pace, review mistakes, and see which words are easiest to confuse.
