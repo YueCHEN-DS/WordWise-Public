@@ -3,6 +3,7 @@ import { spawnSync } from 'child_process';
 import path from 'path';
 import crypto from 'node:crypto';
 import { deriveBetaSuperVerifier } from '../license-core.js';
+import { packageFilePatterns } from './package-file-rules.mjs';
 
 const packagePath = path.resolve('package.json');
 const originalPackageData = fs.readFileSync(packagePath, 'utf8');
@@ -94,21 +95,7 @@ try {
   const args = process.argv.slice(2);
   const target = args.includes('--mac') ? 'mac' : args.includes('--win') ? 'win' : null;
   if (target && Array.isArray(json.build?.files)) {
-    const platformFilters = target === 'mac'
-      ? [
-          '!vocab-core/vocab_core.win32.node',
-          '!node_modules/@node-llama-cpp/win-*/**',
-          '!node_modules/@node-llama-cpp/linux-*/**',
-        ]
-      : [
-          '!vocab-core/vocab_core.mac.node',
-          '!node_modules/@node-llama-cpp/mac-*/**',
-          '!node_modules/@node-llama-cpp/linux-*/**',
-        ];
-    json.build.files = [
-      ...json.build.files.filter(pattern => !platformFilters.includes(pattern)),
-      ...platformFilters,
-    ];
+    json.build.files = packageFilePatterns(json.build.files, target);
   }
 
   // The macOS release is intentionally self-contained: all three built-in
