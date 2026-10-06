@@ -7,6 +7,8 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test test/*.test.js",
+    "check:public-files": "node scripts/check-public-files.mjs",
+    "check:package-files": "node scripts/check-package-files.mjs",
     "rebuild": "electron-rebuild",
     "pack-audio": "node scripts/pack_audio_db.mjs",
     "prebuild-vocab": "node scripts/prebuild_vocab_dbs.mjs",

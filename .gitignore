@@ -92,3 +92,21 @@ vocab-core/target/
 wordwise-keys/
 .env
 .env.*
+
+# Additional private dictionaries and hosted-service runtime material
+/db/*.json
+/db/*.csv
+/online-trial/
+/private-assets/
+/runtime/
+/backups/
+/.worktrees/
+/.codex/
+*.key
+*.crt
+*.age
+*.dump
+*.jsonl
+*.db-journal
+__pycache__/
+*.pyc
