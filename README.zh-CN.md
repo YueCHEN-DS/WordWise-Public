@@ -18,7 +18,7 @@ WordWise 是一款桌面英语词汇学习应用，帮助你专注练习并巩�
 ## WordWise Web v2.0 — 公开测试版
 
 **[打开 WordWise Web](https://wordwise.dpdns.org/)**，注册新账户或使用已有账户登录。
-在线平台现为 v2.0；下方的桌面版下载仍为 v1.0。本仓库公开部分桌面应用源码和
+在线平台现为 v2.0；下方提供 WordWise v2.0.0 Windows x64 桌面版下载。本仓库公开部分桌面应用源码和
 核心算法，并不包含在线服务的完整源码。
 
 - 学习英语词汇，并用中文或法语回答单词的含义。
@@ -74,8 +74,11 @@ npm run check:package-files
 
 ### 在线体验版现已开放：[WordWise-Web](https://wordwise.dpdns.org)
 
-- 百度网盘：[WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A)，提取码：vjra
-- Google Drive：[WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+- 百度网盘：[WordWise v2.0.0 — Windows x64](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A)，提取码：vjra
+- Google Drive：[WordWise v2.0.0 — Windows x64](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+
+**Slim** 版在应用内下载模型；**Full** 版已包含模型，安装时请将安装 EXE
+与配套归档文件放在同一文件夹中。
 
 **如有任何问题，或希望申请一年的免费试用，请联系开发者：feedback@wordwise.dpdns.org。**
 

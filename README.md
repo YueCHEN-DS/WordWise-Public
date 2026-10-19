@@ -21,7 +21,7 @@ answers.
 
 **[Open WordWise Web](https://wordwise.dpdns.org/)** to register or sign in with
 your existing account. The hosted portal is now v2.0; the desktop downloads
-below remain v1.0. This repository continues to provide selected desktop source
+below are WordWise v2.0.0 for Windows x64. This repository continues to provide selected desktop source
 and core algorithms, rather than the hosted service's complete source code.
 
 - Practise English vocabulary with Chinese or French answers.
@@ -82,8 +82,11 @@ npm run check:package-files
 
 ## Downloads
 ### We are now provide the online trail version which is accessible in [WordWise-Web](https://wordwise.dpdns.org)
-- Baidu Netdisk: [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra 
-- Google Drive: [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+- Baidu Netdisk: [WordWise v2.0.0 — Windows x64](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A) code: vjra
+- Google Drive: [WordWise v2.0.0 — Windows x64](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+
+**Slim** downloads the model inside the app; **Full** includes it and requires
+the setup EXE and archive to stay together.
 
 **If you have any questions, contact to the developer at feedback@wordwise.dpdns.org for one year free trial**
 

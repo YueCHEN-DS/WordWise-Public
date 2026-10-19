@@ -23,7 +23,7 @@ en option, fournir un retour sémantique sur vos réponses écrites.
 **[Ouvrir WordWise Web](https://wordwise.dpdns.org/)** pour créer un compte ou
 vous connecter avec votre compte existant. Le portail en ligne est désormais
 en version v2.0 ; les téléchargements de l’application de bureau ci-dessous
-restent en version v1.0. Ce dépôt publie une sélection du code de l’application
+correspondent à WordWise v2.0.0 pour Windows x64. Ce dépôt publie une sélection du code de l’application
 de bureau et de ses algorithmes, sans inclure le code complet du service hébergé.
 
 - Révisez le vocabulaire anglais en répondant en chinois ou en français.
@@ -89,8 +89,11 @@ npm run check:package-files
 
 ### La version d’essai en ligne est disponible sur [WordWise-Web](https://wordwise.dpdns.org)
 
-- Baidu Netdisk : [WordWise-v1.0.0](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A), code d’accès : vjra
-- Google Drive : [WordWise-v1.0.0](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+- Baidu Netdisk : [WordWise v2.0.0 — Windows x64](https://pan.baidu.com/s/1LD4QVatnQr7FSxPloC1c5A), code d’accès : vjra
+- Google Drive : [WordWise v2.0.0 — Windows x64](https://drive.google.com/drive/folders/1jb0jFgo42EUx7rVZQSWyhnYVrrr3LOGF?usp=sharing)
+
+**Slim** télécharge le modèle dans l’application ; **Full** l’inclut.
+Gardez l’EXE d’installation et l’archive Full dans le même dossier.
 
 **Pour toute question ou pour demander un essai gratuit d’un an, contactez le développeur à feedback@wordwise.dpdns.org.**
 
